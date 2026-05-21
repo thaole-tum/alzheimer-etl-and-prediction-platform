@@ -1,13 +1,15 @@
 import psycopg2
 
+
 class DatabaseConnector:
     def __init__(self, host, dbname, user, password, port=5432):
         self.connection_params = {
-            "host": "localhost",
-            "dbname": "alzheimer_db",
-            "user": "thaole",
-            "password": "alzheimerpassword"
+            "host": host,
+            "dbname": dbname,
+            "user": user,
+            "password": password,
+            "port": port,
         }
 
     def connect(self):
-        conn = psycopg2.connect(**self.connection_params)
+        return psycopg2.connect(**self.connection_params)

@@ -5,13 +5,34 @@ services:
     image: postgres:15
     container_name: alzheimer_db
     environment:
-      POSTGRES_USER: thaole
-      POSTGRES_PASSWORD: alzheimerpassword
-      POSTGRES_DB: alzheimer_db
+      POSTGRES_USER: ${POSTGRES_USER:-thaole}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-alzheimerpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-alzheimer_db}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-thaole} -d ${POSTGRES_DB:-alzheimer_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    environment:
+      DB_HOST: postgres
+      DB_NAME: ${POSTGRES_DB:-alzheimer_db}
+      DB_USER: ${POSTGRES_USER:-thaole}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-alzheimerpassword}
+      DB_PORT: 5432
+      INPUT_PATH: /app/data/raw/alzheimers_disease_data.csv
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["python", "etl/pipeline.py"]
 
 volumes:
   postgres_data:

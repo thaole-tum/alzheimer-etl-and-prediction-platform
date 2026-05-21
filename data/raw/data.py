@@ -1,5 +1,6 @@
 import kagglehub
 
-path = kagglehub.dataset_download("rabieelkharoua/alzheimers-disease-dataset")
 
-print("Path to dataset files:", path)
+if __name__ == "__main__":
+    path = kagglehub.dataset_download("rabieelkharoua/alzheimers-disease-dataset")
+    print(f"Path to dataset files: {path}")

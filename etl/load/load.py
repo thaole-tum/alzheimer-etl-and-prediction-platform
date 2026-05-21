@@ -3,6 +3,7 @@ from psycopg2.extras import execute_batch
 
 from etl.load.db import DatabaseConnector
 
+
 class Load:
     def __init__(self, db_config):
         self.db = DatabaseConnector(**db_config)
@@ -11,13 +12,27 @@ class Load:
         print("Loading data into PostgreSQL...")
 
         conn = self.db.connect()
-        cur = conn.cursor()
+        try:
+            required_columns = ["age", "gender", "bmi", "cognitive_score", "risk_score"]
+            missing = [column for column in required_columns if column not in df.columns]
+            if missing:
+                raise KeyError(f"Missing required load columns: {', '.join(missing)}")
 
-        execute_batch(cur, """
-            INSERT INTO alzheimer_data (age, gender, bmi, risk_score)
-            VALUES (%s, %s, %s, %s, %s)
-        """, df[['Age', 'Gender', 'BMI', 'RiskScore']].values.tolist())
+            records = df[["age", "gender", "bmi", "cognitive_score", "risk_score"]].itertuples(
+                index=False,
+                name=None,
+            )
 
-        conn.commit()
-        cur.close()
-        conn.close()
+            with conn.cursor() as cur:
+                execute_batch(
+                    cur,
+                    """
+                    INSERT INTO alzheimer_data (age, gender, bmi, cognitive_score, risk_score)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    list(records),
+                )
+
+            conn.commit()
+        finally:
+            conn.close()
