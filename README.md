@@ -17,16 +17,6 @@ This repository is designed to show how raw data can be extracted, cleaned, tran
 - SQL scripts for database schema and analytics queries
 - Basic test coverage for the transformation and prediction layers
 
-## What This Project Demonstrates
-
-This project is a strong portfolio piece because it combines several skills in one workflow:
-
-- Data ingestion from CSV files
-- Data cleaning and feature engineering with `pandas`
-- Batch loading into PostgreSQL with `psycopg2`
-- Basic Docker knowledge and service orchestration
-- Model inference with a saved machine-learning model
-
 ## Repository Structure
 
 ```text
@@ -161,14 +151,10 @@ pytest
 - Run SQL queries against the loaded data
 - Use the saved model to generate predictions from structured input
 
-## Why This Project Is Good For A CV
+## Data Source
 
-This project communicates that you can:
-
-- Work with real data files and transform them into a database-ready format
-- Build a reproducible local environment with Docker
-- Combine engineering and machine learning in one workflow
-- Write code that is practical, readable, and easy to demonstrate
+The analysis and modeling in this project use the public Alzheimer’s Disease Dataset from Kaggle:
+[Alzheimer’s Disease Dataset](https://www.kaggle.com/datasets/rabieelkharoua/alzheimers-disease-dataset)
 
 ## Next Improvements
 
@@ -177,7 +163,3 @@ If you want to make the project even stronger for interviews, the next best upgr
 - Add logging and validation checks
 - Expose the prediction workflow through a small API or CLI
 - Add a short architecture diagram to the README
-
-## Notes
-
-The repository is now better positioned as a portfolio showcase for ETL, Docker, and machine-learning basics. If you want, I can also help you take the next step and add a small API layer or a cleaner model training notebook summary.
